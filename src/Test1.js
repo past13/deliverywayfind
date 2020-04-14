@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import styled from 'styled-components';
 
 const Test1 = () => {
   
@@ -23,7 +24,8 @@ const Test1 = () => {
 
   const initMap = () => {
     const index = {};
-    const map = mapRef.current.value.split(",");
+    const cleanMap = cleanInput(mapRef.current.value);
+    const map = cleanMap.split(",");
     map.forEach((e) => {
       index[e[0]] = { ...index[e[0]], [e[1]]: +e.substr(2) };
     });
@@ -42,33 +44,77 @@ const Test1 = () => {
     return distance;
   };
 
+  const cleanInput = (input) => {
+    return input.replace(/\s/g, '');
+  }
+
   const handleSubmit = () => {
     const map = initMap();
-    const destination = destinationRef.current.value.split(",");
+    const cleanDest = cleanInput(destinationRef.current.value);
+    const destination = cleanDest.split(",");
     const result = findRoute(destination, map) ? findRoute(destination, map) : "no souch route";
     setCounter(result);
+
   };
 
   return (
     <Fragment>
-      <label>
-        Full map
-        <input 
+      <LabelMap>Full map</LabelMap>
+      <Input 
         ref={mapRef}
-        defaultValue= {mapExample} />
-      </label>
+        defaultValue= {mapExample} 
+      />
       <br />
-      <label>
-        Destination
-        <input ref={destinationRef} 
-        defaultValue={destinExampl} />
-      </label>
+      <Label>Destination</Label>
+      <Input 
+        ref={destinationRef} 
+        defaultValue={destinExampl} 
+      />
       <br />
-      <button onClick={handleSubmit}>Submit</button>
-      <div>{counter}</div>
+      <Button onClick={handleSubmit}>Submit</Button>
+      <Result>Path weight: {counter}</Result>
     </Fragment>
   );
 };
 
 export default Test1;
 
+const Result = styled.div`
+  font-size: 14px;
+  padding: 0.25em 1em;
+  margin: 0 1em;
+`;
+
+const LabelMap = styled.label`
+  font-size: 10px;
+  padding: 0.25em 1em;
+  margin: 0 1em;
+`;
+
+const Label = styled.label`
+  font-size: 10px;
+  padding: 0.25em 1em;
+  margin: 0 1em;
+`;
+
+const Input = styled.input`
+  font-size: 10px;
+  padding: 0.25em 1em;
+  margin: 0 1em;
+`;
+
+const Button = styled.button`
+  cursor: pointer;
+  background: transparent;
+  font-size: 10px;
+  border-radius: 3px;
+  color: blue;
+  border: 2px solid blue;
+  margin: 0 2em;
+  padding: 0.25em 1em;
+  transition: 0.5s all ease-out;
+  &:hover {
+    background-color: blue;
+    color: white;
+  }
+`;
