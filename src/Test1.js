@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 const Test1 = () => {
   
   const mapRef = React.useRef();
   const destinationRef = React.useRef();
+  const [counter, setCounter] = useState(0);
 
   const mapExample = [
         "AB1", 
@@ -44,8 +45,8 @@ const Test1 = () => {
   const handleSubmit = () => {
     const map = initMap();
     const destination = destinationRef.current.value.split(",");
-    
     const result = findRoute(destination, map) ? findRoute(destination, map) : "no souch route";
+    setCounter(result);
   };
 
   return (
@@ -64,7 +65,7 @@ const Test1 = () => {
       </label>
       <br />
       <button onClick={handleSubmit}>Submit</button>
-      <div>result</div>
+      <div>{counter}</div>
     </Fragment>
   );
 };
